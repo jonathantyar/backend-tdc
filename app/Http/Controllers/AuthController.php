@@ -7,7 +7,6 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
-use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
@@ -22,7 +21,7 @@ class AuthController extends Controller
             if ($validateRequest->fails()) {
                 return response()->json([
                     'status' => false,
-                    'message' => 'Request is not validate',
+                    'message' => implode(",", $validateRequest->messages()->all()),
                     'error' => $validateRequest->errors(),
                 ], 401);
             }
@@ -52,7 +51,7 @@ class AuthController extends Controller
             if ($validateRequest->fails()) {
                 return response()->json([
                     'status' => false,
-                    'message' => 'Request is not validate',
+                    'message' => implode(",", $validateRequest->messages()->all()),
                     'error' => $validateRequest->errors(),
                 ], 401);
             }

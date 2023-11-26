@@ -52,7 +52,7 @@ class UserController extends Controller
             if ($validateRequest->fails()) {
                 return response()->json([
                     'status' => false,
-                    'message' => 'Request is not validate',
+                    'message' => implode(",", $validateRequest->messages()->all()),
                     'error' => $validateRequest->errors(),
                 ], 401);
             }
@@ -112,14 +112,14 @@ class UserController extends Controller
     {
         try {
             $validateRequest = Validator::make($request->all(), [
-                'email' => ['required', 'email', 'unique:users'],
+                'email' => ['required', 'email', 'unique:users,email,' . $id],
                 'name' => ['required'],
-                'password' => ['required', 'min:8'],
+                'password' => ['nullable', 'min:8'],
             ]);
             if ($validateRequest->fails()) {
                 return response()->json([
                     'status' => false,
-                    'message' => 'Request is not validate',
+                    'message' => implode(",", $validateRequest->messages()->all()),
                     'error' => $validateRequest->errors(),
                 ], 401);
             }
@@ -150,7 +150,7 @@ class UserController extends Controller
     public function destroy(string $id)
     {
         try {
-            $authenticatedUser = auth('sanctum')->user();
+            $authenticatedUser = auth('api')->user();
             if ($authenticatedUser->id == $id) {
                 return response()->json([
                     'status' => false,
