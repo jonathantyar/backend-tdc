@@ -1,0 +1,36 @@
+version: "3.7"
+services:
+    backend-tdc:
+        build:
+            context: ./
+            dockerfile: ./docker/Dockerfile
+        image: backend-tdc
+        container_name: backend-tdc
+        restart: unless-stopped
+        ports:
+            - 9000:8000
+        volumes:
+            - ./:/var/www
+        networks:
+            - backend-tdc
+        depends_on:
+            - db-tdc
+    db-tdc:
+        image: mysql:8.0
+        container_name: db-tdc
+        restart: unless-stopped
+        environment:
+            MYSQL_DATABASE: ${DB_DATABASE}
+            MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+            MYSQL_PASSWORD: ${DB_PASSWORD}
+            MYSQL_USER: ${DB_USERNAME}
+            SERVICE_TAGS: dev
+            SERVICE_NAME: mysql
+        volumes:
+            - ./docker-compose/mysql:/docker-entrypoint-initdb.d
+        networks:
+            - backend-tdc
+
+networks:
+    backend-tdc:
+        driver: bridge
