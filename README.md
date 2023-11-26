@@ -14,7 +14,14 @@ This is a Laravel application that allows you to CRUD users data with authentica
 
 1. Make sure you have Docker installed on your system.
 
-2. Start the Docker containers:
+2. Set up environment variables:
+   Rename the .env.example file to .env:
+
+```
+cp .env.example .env
+```
+
+3. Start the Docker containers:
 
 ```
 docker-compose up -d
